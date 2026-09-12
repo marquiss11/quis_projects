@@ -1,24 +1,31 @@
-import logo from './logo.svg';
+import {useState} from 'react';
 import './App.css';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import EmployeeForm from './components/EmployeeForm';
 
 function App() {
+  const [employees, setEmployees] = useState ([]);
+
+  const saveData = (data) =>{
+    localStorage.setItem('employees', JSON.stringify(data));
+  };
+  const addEmployee = (employee) => {
+    const updatedEmployees = [...employees, employee];
+
+    setEmployees([...employees, employee]);
+    saveData(updatedEmployees);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/">
+          <div className="App">
+            <EmployeeForm addEmployee={addEmployee} />
+          </div>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
